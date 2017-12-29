@@ -1,5 +1,9 @@
 #!/bin/bash
-max=10
+# Generate and push 0 - N (random) empty commits in the current project
+if [[ $# -ne 1 ]]; then
+    echo "${0##*/} <max_commits>"
+fi
+max=$1
 
 # skip if saturday or sunday
 [[ `date +%u` -ge 6 ]] && exit 0

@@ -1,0 +1,5 @@
+#!/bin/bash -eu
+tmp=`mktemp`
+echo "cd `pwd` && su $USER ./commit" > $tmp
+chmod +x $tmp
+sudo mv -f $tmp  /etc/cron.daily/commit.$USER
