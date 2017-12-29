@@ -1,5 +1,5 @@
 #!/bin/bash -eu
-max=10
+max=5
 tmp=`mktemp`
 echo "cd `pwd` && su $USER ./commit $max" > $tmp
 chmod +x $tmp
