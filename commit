@@ -1,17 +1,31 @@
-#!/bin/bash
+#!/bin/bash -eu
 # Generate and push 0 - N (random) empty commits in the current project
-if [[ $# -ne 1 ]]; then
-    echo "${0##*/} <max_commits>"
+
+commit_and_push() {
+    if [[ $# -ne 1 ]]; then
+        echo "usage: ${0##*/} <max_commits>"
+        exit 1
+    fi
+    max=$1
+
+    # skip if saturday or sunday
+    [[ `date +%u` -ge 6 ]] && exit 0
+
+    # commit up to $max
+    for i in $(seq 0 $max | head -n $(shuf -i 0-$max | head -1)); do
+        git commit --allow-empty -m `uuidgen -r`
+    done
+
+    # push
+    git push
+}
+
+if ! out=`commit_and_push $@`; then
+    if email=`grep email ~/.gitconfig | awk -F = '{print $2}' | tr -d [:space:]`; then
+        mail -s
+    else
+        # well we tried
+    fi
+# we tried
+    echo "$0 failed, out=$out"
 fi
-max=$1
-
-# skip if saturday or sunday
-[[ `date +%u` -ge 6 ]] && exit 0
-
-# commit up to $max
-for i in $(seq 0 $max | head -n $(shuf -i 0-$max | head -1)); do
-    git commit --allow-empty -m `uuidgen -r`
-done
-
-# push
-git push
