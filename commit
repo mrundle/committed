@@ -1,0 +1,13 @@
+#!/bin/bash
+max=10
+
+# skip if saturday or sunday
+[[ `date +%u` -ge 6 ]] && exit 0
+
+# commit up to $max
+for i in $(seq 0 $max | head -n $(shuf -i 0-$max | head -1)); do
+    git commit --allow-empty -m `uuidgen -r`
+done
+
+# push
+git push
