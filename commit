@@ -20,12 +20,5 @@ commit_and_push() {
     git push
 }
 
-if ! out=`commit_and_push $@`; then
-    if email=`grep email ~/.gitconfig | awk -F = '{print $2}' | tr -d [:space:]`; then
-        mail -s
-    else
-        # well we tried
-    fi
-# we tried
-    echo "$0 failed, out=$out"
-fi
+# TODO log or email on failure
+commit_and_push $@
